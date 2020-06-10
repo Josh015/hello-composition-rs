@@ -1,0 +1,12 @@
+[package]
+name = "hello-composition-rs"
+version = "0.1.0"
+authors = ["Joshua Ols"]
+edition = "2018"
+
+[dependencies]
+winit = "0.22.0"
+raw-window-handle = "0.3.3"
+rand = "0.7.3"
+winrt = "0.7.0"
+bindings = { path = "bindings" }
