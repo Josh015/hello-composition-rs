@@ -19,7 +19,7 @@ fn run() -> winrt::Result<()> {
 
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-    window.set_title("HelloComposition");
+    window.set_title("Click to add composition elements...");
 
     let compositor = Compositor::new()?;
     let target = window.create_window_target(&compositor, false)?;
