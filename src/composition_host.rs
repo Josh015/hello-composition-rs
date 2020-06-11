@@ -67,6 +67,8 @@ impl CompositionHost {
         let offset_x = visual.offset()?.x;
         let animation = self.compositor.create_vector3_key_frame_animation()?;
         let bottom = self.parent_size.y - visual.size()?.y;
+        let duration = Duration::from_secs(2);
+        let delay = Duration::from_secs(delay);
 
         animation.insert_key_frame(
             1.0,
@@ -76,8 +78,8 @@ impl CompositionHost {
                 z: 0.0,
             },
         )?;
-        animation.set_duration(TimeSpan::from(Duration::from_secs(2)))?;
-        animation.set_delay_time(TimeSpan::from(Duration::from_secs(delay)))?;
+        animation.set_duration(TimeSpan::from(duration))?;
+        animation.set_delay_time(TimeSpan::from(delay))?;
         visual.start_animation("Offset", animation)?;
 
         Ok(())
@@ -90,6 +92,6 @@ impl CompositionHost {
         let g = die.sample(&mut rng);
         let b = die.sample(&mut rng);
 
-        Ok(Color { r, g, b, a: 255 })
+        Ok(Color { a: 255, r, g, b })
     }
 }

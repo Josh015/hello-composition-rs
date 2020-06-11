@@ -33,7 +33,7 @@ fn run() -> winrt::Result<()> {
         x: window_size.width as f32,
         y: window_size.height as f32,
     };
-    let mut demo = CompositionHost::new(&root, &window_size)?;
+    let mut host = CompositionHost::new(&root, &window_size)?;
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -47,7 +47,7 @@ fn run() -> winrt::Result<()> {
                 ..
             } => {
                 if state == ElementState::Pressed {
-                    demo.on_pointer_pressed(button == MouseButton::Right, false)
+                    host.on_pointer_pressed(button == MouseButton::Right, false)
                         .unwrap();
                 }
             }

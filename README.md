@@ -7,3 +7,32 @@ The Visual Layer APIs provide a high performance, retained-mode API for graphics
 This sample demonstrates how to set up the interop code needed to use these APIs in a Rust app.
 
 ![App user interface](app-ui-rust.png)
+
+## Features
+
+This sample includes the following features:
+
+- A host module that implements interop between Win32 and UWP Composition APIs.
+- Simple use of Composition visuals, brushes, and animations.
+
+## Run the sample
+
+This sample requires:
+- [Rust](https://www.rust-lang.org/tools/install)
+
+It's also recommended that you set up:
+- [VS Code](https://code.visualstudio.com/)
+- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer)
+
+## Code at a glance
+
+<!-- ### CompositionHost
+
+The main feature of this sample is the **CompositionHost** class, which contains the code to set up interop between Win32 and the UWP Visual Layer.
+
+The CompositionHost class is written in [C++/WinRT](https://docs.microsoft.com/windows/uwp/cpp-and-winrt-apis/). For more info about using C++/WinRT with an existing C++ Win32 desktop app, see [Get started with C++/WinRT - Modify a Windows Desktop application project to add C++/WinRT support](https://docs.microsoft.com/windows/uwp/cpp-and-winrt-apis/get-started#modify-a-windows-desktop-application-project-to-add-cwinrt-support). -->
+
+## See also
+
+- [Visual Layer documentation](https://docs.microsoft.com/windows/uwp/composition/visual-layer)
+- [Windows.UI.Composition](https://docs.microsoft.com/uwp/api/windows.ui.composition)
