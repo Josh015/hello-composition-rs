@@ -20,10 +20,6 @@ This sample includes the following features:
 This sample requires:
 - [Rust](https://www.rust-lang.org/tools/install)
 
-It's also recommended that you set up:
-- [VS Code](https://code.visualstudio.com/)
-- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer)
-
 ## Code at a glance
 
 <!-- ### CompositionHost
