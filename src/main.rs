@@ -6,7 +6,7 @@ use composition_host::CompositionHost;
 use interop::{create_dispatcher_queue_controller_for_current_thread, ro_initialize, RoInitType};
 use window_target::CompositionDesktopWindowTargetSource;
 use winit::{
-    event::{ElementState, Event, MouseButton, WindowEvent},
+    event::{ElementState, Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
@@ -19,6 +19,8 @@ fn run() -> winrt::Result<()> {
 
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
+    let window_size = window.inner_size();
+
     window.set_title("Click to add composition elements...");
 
     let compositor = Compositor::new()?;
@@ -28,12 +30,7 @@ fn run() -> winrt::Result<()> {
     root.set_relative_size_adjustment(Vector2 { x: 1.0, y: 1.0 })?;
     target.set_root(&root)?;
 
-    let window_size = window.inner_size();
-    let window_size = Vector2 {
-        x: window_size.width as f32,
-        y: window_size.height as f32,
-    };
-    let mut host = CompositionHost::new(&root, &window_size)?;
+    let mut host = CompositionHost::new(&root, window_size.width, window_size.height)?;
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
@@ -43,12 +40,11 @@ fn run() -> winrt::Result<()> {
                 window_id,
             } if window_id == window.id() => *control_flow = ControlFlow::Exit,
             Event::WindowEvent {
-                event: WindowEvent::MouseInput { state, button, .. },
+                event: WindowEvent::MouseInput { state, .. },
                 ..
             } => {
                 if state == ElementState::Pressed {
-                    host.on_pointer_pressed(button == MouseButton::Right, false)
-                        .unwrap();
+                    host.add_element().unwrap();
                 }
             }
             _ => (),
