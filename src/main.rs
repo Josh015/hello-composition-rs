@@ -1,6 +1,5 @@
 mod composition_host;
 mod interop;
-mod window_target;
 
 use composition_host::CompositionHost;
 use winit::{
