@@ -31,7 +31,7 @@ fn run() -> winrt::Result<()> {
     root.set_relative_size_adjustment(Vector2 { x: 1.0, y: 1.0 })?;
     target.set_root(&root)?;
 
-    let mut host = CompositionHost::new(&root, window_size.width, window_size.height)?;
+    let host = CompositionHost::new(&root, window_size.width, window_size.height)?;
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
