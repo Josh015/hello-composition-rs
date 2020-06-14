@@ -22,6 +22,7 @@ fn run() -> winrt::Result<()> {
     let window_size = window.inner_size();
 
     window.set_title("Click to add composition elements...");
+    window.set_resizable(false);
 
     let compositor = Compositor::new()?;
     let target = window.create_window_target(&compositor, false)?;
