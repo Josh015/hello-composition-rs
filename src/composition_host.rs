@@ -24,9 +24,10 @@ use raw_window_handle::HasRawWindowHandle;
 use std::time::Duration;
 use winrt::TryInto;
 
+#[allow(dead_code)]
 pub struct CompositionHost {
-    _dispatcher_queue_controller: DispatcherQueueController,
-    _target: DesktopWindowTarget,
+    dispatcher_queue_controller: DispatcherQueueController,
+    target: DesktopWindowTarget,
     container_visual: ContainerVisual,
     compositor: Compositor,
     width: u32,
@@ -52,16 +53,14 @@ impl CompositionHost {
         container_visual.set_relative_size_adjustment(Vector2 { x: 1.0, y: 1.0 })?;
         target.set_root(&container_visual)?;
 
-        let result = Self {
-            _dispatcher_queue_controller: dispatcher_queue_controller,
-            _target: target,
+        Ok(Self {
+            dispatcher_queue_controller,
+            target,
             container_visual,
             compositor,
             width,
             height,
-        };
-
-        Ok(result)
+        })
     }
 
     pub fn add_element(&self) -> winrt::Result<()> {
