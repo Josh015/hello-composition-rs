@@ -1,10 +1,18 @@
+use crate::interop::{
+    create_dispatcher_queue_controller_for_current_thread, ro_initialize, CompositorDesktopInterop,
+    RoInitType,
+};
 use bindings::windows::{
     foundation::{
         numerics::{Vector2, Vector3},
         TimeSpan,
     },
+    system::DispatcherQueueController,
     ui::{
-        composition::{Compositor, ContainerVisual, SpriteVisual},
+        composition::{
+            desktop::DesktopWindowTarget,
+            {Compositor, ContainerVisual, SpriteVisual},
+        },
         Color,
     },
 };
@@ -12,20 +20,43 @@ use rand::{
     distributions::{Distribution, Uniform},
     prelude::*,
 };
+use raw_window_handle::HasRawWindowHandle;
 use std::time::Duration;
+use winrt::TryInto;
 
 pub struct CompositionHost {
     container_visual: ContainerVisual,
     compositor: Compositor,
+    _target: DesktopWindowTarget,
+    _controller: DispatcherQueueController,
     width: u32,
     height: u32,
 }
 
 impl CompositionHost {
-    pub fn new(container_visual: &ContainerVisual, width: u32, height: u32) -> winrt::Result<Self> {
+    pub fn new(window: &dyn HasRawWindowHandle, width: u32, height: u32) -> winrt::Result<Self> {
+        ro_initialize(RoInitType::MultiThreaded)?;
+
+        let controller = create_dispatcher_queue_controller_for_current_thread()?;
+        let compositor = Compositor::new()?;
+        let window_handle = window.raw_window_handle();
+        let window_handle = match window_handle {
+            raw_window_handle::RawWindowHandle::Windows(window_handle) => window_handle.hwnd,
+            _ => panic!("Unsupported platform!"),
+        };
+
+        let compositor_desktop: CompositorDesktopInterop = compositor.try_into()?;
+        let target = compositor_desktop.create_desktop_window_target(window_handle, false)?;
+
+        let container_visual = compositor.create_container_visual()?;
+        container_visual.set_relative_size_adjustment(Vector2 { x: 1.0, y: 1.0 })?;
+        target.set_root(&container_visual)?;
+
         let result = Self {
-            container_visual: container_visual.clone(),
-            compositor: container_visual.compositor()?.clone(),
+            container_visual: container_visual,
+            compositor: compositor,
+            _target: target,
+            _controller: controller,
             width,
             height,
         };
