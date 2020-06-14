@@ -25,19 +25,19 @@ use std::time::Duration;
 use winrt::TryInto;
 
 pub struct CompositionHost {
+    _dispatcher_queue_controller: DispatcherQueueController,
+    _target: DesktopWindowTarget,
     container_visual: ContainerVisual,
     compositor: Compositor,
-    _target: DesktopWindowTarget,
-    _controller: DispatcherQueueController,
     width: u32,
     height: u32,
 }
 
 impl CompositionHost {
-    pub fn new(window: &dyn HasRawWindowHandle, width: u32, height: u32) -> winrt::Result<Self> {
+    pub fn new<T: HasRawWindowHandle>(window: &T, width: u32, height: u32) -> winrt::Result<Self> {
         ro_initialize(RoInitType::MultiThreaded)?;
 
-        let controller = create_dispatcher_queue_controller_for_current_thread()?;
+        let dispatcher_queue_controller = create_dispatcher_queue_controller_for_current_thread()?;
         let compositor = Compositor::new()?;
         let window_handle = window.raw_window_handle();
         let window_handle = match window_handle {
@@ -53,10 +53,10 @@ impl CompositionHost {
         target.set_root(&container_visual)?;
 
         let result = Self {
-            container_visual: container_visual,
-            compositor: compositor,
+            _dispatcher_queue_controller: dispatcher_queue_controller,
             _target: target,
-            _controller: controller,
+            container_visual,
+            compositor,
             width,
             height,
         };
