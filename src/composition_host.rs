@@ -1,18 +1,10 @@
-use crate::interop::{
-    create_dispatcher_queue_controller_for_current_thread, ro_initialize, CompositorDesktopInterop,
-    RoInitType,
-};
 use bindings::windows::{
     foundation::{
         numerics::{Vector2, Vector3},
         TimeSpan,
     },
-    system::DispatcherQueueController,
     ui::{
-        composition::{
-            desktop::DesktopWindowTarget,
-            {Compositor, ContainerVisual, SpriteVisual},
-        },
+        composition::{Compositor, ContainerVisual, SpriteVisual},
         Color,
     },
 };
@@ -20,14 +12,9 @@ use rand::{
     distributions::{Distribution, Uniform},
     prelude::*,
 };
-use raw_window_handle::HasRawWindowHandle;
 use std::time::Duration;
-use winrt::TryInto;
 
-#[allow(dead_code)]
 pub struct CompositionHost {
-    dispatcher_queue_controller: DispatcherQueueController,
-    desktop_window_target: DesktopWindowTarget,
     container_visual: ContainerVisual,
     compositor: Compositor,
     width: u32,
@@ -35,33 +22,10 @@ pub struct CompositionHost {
 }
 
 impl CompositionHost {
-    pub fn new<T: HasRawWindowHandle>(window: &T, width: u32, height: u32) -> winrt::Result<Self> {
-        // Ensure dispatcher queue.
-        ro_initialize(RoInitType::MultiThreaded)?;
-        let dispatcher_queue_controller = create_dispatcher_queue_controller_for_current_thread()?;
-
-        // Create desktop window target.
-        let compositor = Compositor::new()?;
-        let window_handle = window.raw_window_handle();
-        let window_handle = match window_handle {
-            raw_window_handle::RawWindowHandle::Windows(window_handle) => window_handle.hwnd,
-            _ => panic!("Unsupported platform!"),
-        };
-
-        let compositor_desktop: CompositorDesktopInterop = compositor.try_into()?;
-        let desktop_window_target =
-            compositor_desktop.create_desktop_window_target(window_handle, false)?;
-
-        // Create composition root.
-        let container_visual = compositor.create_container_visual()?;
-        container_visual.set_relative_size_adjustment(Vector2 { x: 1.0, y: 1.0 })?;
-        desktop_window_target.set_root(&container_visual)?;
-
+    pub fn new(container_visual: &ContainerVisual, width: u32, height: u32) -> winrt::Result<Self> {
         Ok(Self {
-            dispatcher_queue_controller,
-            desktop_window_target,
-            container_visual,
-            compositor,
+            container_visual: container_visual.clone(),
+            compositor: container_visual.compositor()?.clone(),
             width,
             height,
         })
