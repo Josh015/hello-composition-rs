@@ -17,8 +17,11 @@ This sample includes the following features:
 
 ## Run the sample
 
-This sample requires:
-- [Rust](https://www.rust-lang.org/tools/install)
+Running this sample requires at least Windows build 1803 (v10.0.17134.0). To compile and run, use [cargo](https://www.rust-lang.org/learn/get-started):
+
+```
+cargo run --release
+```
 
 ## Code at a glance
 
