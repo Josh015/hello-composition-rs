@@ -27,7 +27,7 @@ use winrt::TryInto;
 #[allow(dead_code)]
 pub struct CompositionHost {
     dispatcher_queue_controller: DispatcherQueueController,
-    target: DesktopWindowTarget,
+    desktop_window_target: DesktopWindowTarget,
     container_visual: ContainerVisual,
     compositor: Compositor,
     width: u32,
@@ -36,9 +36,11 @@ pub struct CompositionHost {
 
 impl CompositionHost {
     pub fn new<T: HasRawWindowHandle>(window: &T, width: u32, height: u32) -> winrt::Result<Self> {
+        // Ensure dispatcher queue.
         ro_initialize(RoInitType::MultiThreaded)?;
-
         let dispatcher_queue_controller = create_dispatcher_queue_controller_for_current_thread()?;
+
+        // Create desktop window target.
         let compositor = Compositor::new()?;
         let window_handle = window.raw_window_handle();
         let window_handle = match window_handle {
@@ -47,15 +49,17 @@ impl CompositionHost {
         };
 
         let compositor_desktop: CompositorDesktopInterop = compositor.try_into()?;
-        let target = compositor_desktop.create_desktop_window_target(window_handle, false)?;
+        let desktop_window_target =
+            compositor_desktop.create_desktop_window_target(window_handle, false)?;
 
+        // Create composition root.
         let container_visual = compositor.create_container_visual()?;
         container_visual.set_relative_size_adjustment(Vector2 { x: 1.0, y: 1.0 })?;
-        target.set_root(&container_visual)?;
+        desktop_window_target.set_root(&container_visual)?;
 
         Ok(Self {
             dispatcher_queue_controller,
-            target,
+            desktop_window_target,
             container_visual,
             compositor,
             width,
