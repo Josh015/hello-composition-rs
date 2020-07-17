@@ -1,7 +1,6 @@
 use bindings::windows::{
     foundation::{
         numerics::{Vector2, Vector3},
-        TimeSpan,
     },
     ui::{
         composition::{Compositor, ContainerVisual, SpriteVisual},
@@ -72,8 +71,8 @@ impl CompositionHost {
                 z: 0.0,
             },
         )?;
-        animation.set_duration(TimeSpan::from(duration))?;
-        animation.set_delay_time(TimeSpan::from(delay))?;
+        animation.set_duration(duration)?;
+        animation.set_delay_time(delay)?;
         visual.start_animation("Offset", animation)?;
 
         Ok(())

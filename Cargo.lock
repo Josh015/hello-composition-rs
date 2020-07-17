@@ -931,9 +931,8 @@ dependencies = [
 
 [[package]]
 name = "winrt"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e7a6707aad48277a3f68e7de09191c03e06184a01b50ebffd000002ee0fbb27"
+version = "0.7.1"
+source = "git+https://github.com/microsoft/winrt-rs.git#707840bfc6b21ce95be93c51ce4e5d3b981c5afb"
 dependencies = [
  "sha1",
  "winrt_macros",
@@ -941,22 +940,21 @@ dependencies = [
 
 [[package]]
 name = "winrt_gen"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77a3dda4a993af82fb6f639b18568340c1a95160a6dd9dc0f9ff2263a2577a89"
+version = "0.7.1"
+source = "git+https://github.com/microsoft/winrt-rs.git#707840bfc6b21ce95be93c51ce4e5d3b981c5afb"
 dependencies = [
  "proc-macro2 1.0.18",
  "quote 1.0.7",
  "serde_json",
  "sha1",
+ "syn",
  "winrt_gen_macros",
 ]
 
 [[package]]
 name = "winrt_gen_macros"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "78bee2d8e97c35a0a26fde56151a0e10fe0601f747c7364248dc5fd67b0d917f"
+version = "0.7.1"
+source = "git+https://github.com/microsoft/winrt-rs.git#707840bfc6b21ce95be93c51ce4e5d3b981c5afb"
 dependencies = [
  "proc-macro2 1.0.18",
  "quote 1.0.7",
@@ -965,9 +963,8 @@ dependencies = [
 
 [[package]]
 name = "winrt_macros"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc78a0c7bce1d0bb669ceb8faf102c200cd7db14ff7b684a50f588ea6be257a8"
+version = "0.7.1"
+source = "git+https://github.com/microsoft/winrt-rs.git#707840bfc6b21ce95be93c51ce4e5d3b981c5afb"
 dependencies = [
  "proc-macro2 1.0.18",
  "quote 1.0.7",
