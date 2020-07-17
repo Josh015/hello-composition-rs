@@ -19,9 +19,11 @@ fn run() -> winrt::Result<()> {
 
     // Create window.
     let event_loop = EventLoop::new();
-    let window = WindowBuilder::new().build(&event_loop).unwrap();
-    window.set_title("Click to add composition elements...");
-    window.set_resizable(false);
+    let window = WindowBuilder::new()
+        .with_title("Click to add composition elements...")
+        .with_resizable(false)
+        .build(&event_loop)
+        .unwrap();
 
     // Create desktop window target.
     let compositor = Compositor::new()?;

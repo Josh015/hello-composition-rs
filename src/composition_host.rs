@@ -44,7 +44,7 @@ impl CompositionHost {
         })?;
         visual.set_brush(
             self.compositor
-                .create_color_brush_with_color(self.get_random_color())?,
+                .create_color_brush_with_color(Self::get_random_color())?,
         )?;
         visual.set_offset(Vector3 {
             x: offset_x as f32,
@@ -79,7 +79,7 @@ impl CompositionHost {
         Ok(())
     }
 
-    fn get_random_color(&self) -> Color {
+    fn get_random_color() -> Color {
         let mut rng = rand::thread_rng();
         let die = Uniform::from(0..=255);
         let r = die.sample(&mut rng);
