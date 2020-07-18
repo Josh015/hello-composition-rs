@@ -58,8 +58,6 @@ impl CompositionHost {
         let offset_x = visual.offset()?.x;
         let animation = self.compositor.create_vector3_key_frame_animation()?;
         let bottom = self.height as f32 - visual.size()?.y;
-        let duration = Duration::from_secs(2);
-        let delay = Duration::from_secs(3);
 
         animation.insert_key_frame(
             1.0,
@@ -69,8 +67,8 @@ impl CompositionHost {
                 z: 0.0,
             },
         )?;
-        animation.set_duration(duration)?;
-        animation.set_delay_time(delay)?;
+        animation.set_duration(Duration::from_secs(2))?;
+        animation.set_delay_time(Duration::from_secs(3))?;
         visual.start_animation("Offset", animation)?;
 
         Ok(())
