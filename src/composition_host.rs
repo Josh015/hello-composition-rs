@@ -1,7 +1,5 @@
 use bindings::windows::{
-    foundation::{
-        numerics::{Vector2, Vector3},
-    },
+    foundation::numerics::{Vector2, Vector3},
     ui::{
         composition::{Compositor, ContainerVisual, SpriteVisual},
         Color,
