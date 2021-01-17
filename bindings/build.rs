@@ -1,7 +1,5 @@
-winrt::build!(
-    dependencies
-        os
-    types
+fn main() {
+    windows::build!(
         windows::foundation::numerics::{Vector2, Vector3}
         windows::system::DispatcherQueueController
         windows::ui::composition::{
@@ -11,8 +9,7 @@ winrt::build!(
         }
         windows::ui::composition::desktop::DesktopWindowTarget
         windows::ui::Color
-);
-
-fn main() {
-    build();
+        windows::win32::base::CreateDispatcherQueueController
+        windows::win32::winrt::{ICompositorDesktopInterop, RoInitialize}
+    );
 }

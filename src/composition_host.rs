@@ -19,7 +19,7 @@ pub struct CompositionHost {
 }
 
 impl CompositionHost {
-    pub fn new(container_visual: &ContainerVisual, width: u32, height: u32) -> winrt::Result<Self> {
+    pub fn new(container_visual: &ContainerVisual, width: u32, height: u32) -> windows::Result<Self> {
         Ok(Self {
             container_visual: container_visual.clone(),
             compositor: container_visual.compositor()?.clone(),
@@ -28,7 +28,7 @@ impl CompositionHost {
         })
     }
 
-    pub fn add_element(&self) -> winrt::Result<()> {
+    pub fn add_element(&self) -> windows::Result<()> {
         let mut rng = rand::thread_rng();
         let size = rng.gen_range(50, 150);
         let offset_x = rng.gen_range(0, self.width - size);
@@ -54,7 +54,7 @@ impl CompositionHost {
         Ok(())
     }
 
-    fn animate_square(&self, visual: &SpriteVisual) -> winrt::Result<()> {
+    fn animate_square(&self, visual: &SpriteVisual) -> windows::Result<()> {
         let offset_x = visual.offset()?.x;
         let animation = self.compositor.create_vector3_key_frame_animation()?;
         let bottom = self.height as f32 - visual.size()?.y;

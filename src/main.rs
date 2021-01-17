@@ -2,9 +2,10 @@ mod composition_host;
 mod interop;
 mod window_target;
 
+use bindings::windows::win32::winrt::{RoInitialize, RO_INIT_TYPE};
 use bindings::windows::{foundation::numerics::Vector2, ui::composition::Compositor};
 use composition_host::CompositionHost;
-use interop::{create_dispatcher_queue_controller_for_current_thread, ro_initialize, RoInitType};
+use interop::create_dispatcher_queue_controller_for_current_thread;
 use window_target::CompositionDesktopWindowTargetSource;
 use winit::{
     event::{ElementState, Event, WindowEvent},
@@ -12,9 +13,11 @@ use winit::{
     window::WindowBuilder,
 };
 
-fn run() -> winrt::Result<()> {
+fn run() -> windows::Result<()> {
     // Ensure dispatcher queue.
-    ro_initialize(RoInitType::MultiThreaded)?;
+    unsafe {
+        RoInitialize(RO_INIT_TYPE::RO_INIT_SINGLETHREADED).ok()?;
+    }
     let _controller = create_dispatcher_queue_controller_for_current_thread()?;
 
     // Create window.

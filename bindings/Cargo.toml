@@ -4,9 +4,7 @@ version = "0.1.0"
 edition = "2018"
 
 [dependencies]
-winrt = "0.7.2"
-# winrt = { git = "https://github.com/microsoft/winrt-rs.git" }
+windows = { git = "https://github.com/microsoft/windows-rs" }
 
 [build-dependencies]
-winrt = "0.7.2"
-# winrt = { git = "https://github.com/microsoft/winrt-rs.git" }
+windows = { git = "https://github.com/microsoft/windows-rs" }
