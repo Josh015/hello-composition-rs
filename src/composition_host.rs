@@ -19,7 +19,11 @@ pub struct CompositionHost {
 }
 
 impl CompositionHost {
-    pub fn new(container_visual: &ContainerVisual, width: u32, height: u32) -> windows::Result<Self> {
+    pub fn new(
+        container_visual: &ContainerVisual,
+        width: u32,
+        height: u32,
+    ) -> windows::Result<Self> {
         Ok(Self {
             container_visual: container_visual.clone(),
             compositor: container_visual.compositor()?.clone(),

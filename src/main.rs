@@ -1,12 +1,19 @@
 mod composition_host;
-mod interop;
-mod window_target;
 
-use bindings::windows::win32::winrt::{RoInitialize, RO_INIT_TYPE};
-use bindings::windows::{foundation::numerics::Vector2, ui::composition::Compositor};
+use bindings::windows::{
+    foundation::numerics::Vector2,
+    ui::composition::Compositor,
+    win32::{
+        base::{
+            CreateDispatcherQueueController, DispatcherQueueOptions,
+            DISPATCHERQUEUE_THREAD_APARTMENTTYPE, DISPATCHERQUEUE_THREAD_TYPE, HWND,
+        },
+        winrt::{ICompositorDesktopInterop, RoInitialize, RO_INIT_TYPE},
+    },
+};
 use composition_host::CompositionHost;
-use interop::create_dispatcher_queue_controller_for_current_thread;
-use window_target::CompositionDesktopWindowTargetSource;
+use raw_window_handle::HasRawWindowHandle;
+use windows::Interface;
 use winit::{
     event::{ElementState, Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
@@ -18,7 +25,16 @@ fn run() -> windows::Result<()> {
     unsafe {
         RoInitialize(RO_INIT_TYPE::RO_INIT_SINGLETHREADED).ok()?;
     }
-    let _controller = create_dispatcher_queue_controller_for_current_thread()?;
+
+    let options = DispatcherQueueOptions {
+        dw_size: std::mem::size_of::<DispatcherQueueOptions>() as u32,
+        thread_type: DISPATCHERQUEUE_THREAD_TYPE::DQTYPE_THREAD_CURRENT,
+        apartment_type: DISPATCHERQUEUE_THREAD_APARTMENTTYPE::DQTAT_COM_NONE,
+    };
+    let _controller = unsafe {
+        let mut result = None;
+        CreateDispatcherQueueController(options, &mut result).and_some(result)?
+    };
 
     // Create window.
     let event_loop = EventLoop::new();
@@ -30,7 +46,18 @@ fn run() -> windows::Result<()> {
 
     // Create desktop window target.
     let compositor = Compositor::new()?;
-    let target = window.create_window_target(&compositor, false)?;
+    let window_handle = window.raw_window_handle();
+    let window_handle = match window_handle {
+        raw_window_handle::RawWindowHandle::Windows(window_handle) => window_handle.hwnd,
+        _ => panic!("Unsupported platform!"),
+    };
+
+    let compositor_desktop: ICompositorDesktopInterop = compositor.cast()?;
+    let mut result = None;
+
+    let target = compositor_desktop
+        .CreateDesktopWindowTarget(HWND(window_handle as isize), false.into(), &mut result)
+        .and_some(result)?;
 
     // Create composition root.
     let container_visual = compositor.create_container_visual()?;
