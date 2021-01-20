@@ -4,10 +4,11 @@ use bindings::windows::{
     foundation::numerics::Vector2,
     ui::composition::Compositor,
     win32::{
-        base::{
+        system_services::{
             CreateDispatcherQueueController, DispatcherQueueOptions,
-            DISPATCHERQUEUE_THREAD_APARTMENTTYPE, DISPATCHERQUEUE_THREAD_TYPE, HWND,
+            DISPATCHERQUEUE_THREAD_APARTMENTTYPE, DISPATCHERQUEUE_THREAD_TYPE,
         },
+        windows_and_messaging::HWND,
         winrt::{ICompositorDesktopInterop, RoInitialize, RO_INIT_TYPE},
     },
 };
