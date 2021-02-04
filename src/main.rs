@@ -56,9 +56,11 @@ fn run() -> windows::Result<()> {
     let compositor_desktop: ICompositorDesktopInterop = compositor.cast()?;
     let mut result = None;
 
-    let target = compositor_desktop
-        .CreateDesktopWindowTarget(HWND(window_handle as isize), false.into(), &mut result)
-        .and_some(result)?;
+    let target = unsafe {
+        compositor_desktop
+            .CreateDesktopWindowTarget(HWND(window_handle as isize), false.into(), &mut result)
+            .and_some(result)?
+    };
 
     // Create composition root.
     let container_visual = compositor.create_container_visual()?;
