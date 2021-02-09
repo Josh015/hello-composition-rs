@@ -9,12 +9,12 @@ use bindings::windows::{
             DISPATCHERQUEUE_THREAD_APARTMENTTYPE, DISPATCHERQUEUE_THREAD_TYPE,
         },
         windows_and_messaging::HWND,
-        winrt::{ICompositorDesktopInterop, RoInitialize, RO_INIT_TYPE},
+        winrt::ICompositorDesktopInterop,
     },
 };
 use composition_host::CompositionHost;
 use raw_window_handle::HasRawWindowHandle;
-use windows::Interface;
+use windows::{Interface, FALSE};
 use winit::{
     event::{ElementState, Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
@@ -23,9 +23,7 @@ use winit::{
 
 fn run() -> windows::Result<()> {
     // Ensure dispatcher queue.
-    unsafe {
-        RoInitialize(RO_INIT_TYPE::RO_INIT_SINGLETHREADED).ok()?;
-    }
+    windows::initialize_sta()?;
 
     let options = DispatcherQueueOptions {
         dw_size: std::mem::size_of::<DispatcherQueueOptions>() as u32,
@@ -58,7 +56,7 @@ fn run() -> windows::Result<()> {
 
     let target = unsafe {
         compositor_desktop
-            .CreateDesktopWindowTarget(HWND(window_handle as isize), false.into(), &mut result)
+            .CreateDesktopWindowTarget(HWND(window_handle as isize), FALSE, &mut result)
             .and_some(result)?
     };
 
