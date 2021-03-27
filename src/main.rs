@@ -1,20 +1,20 @@
 mod composition_host;
 
-use bindings::windows::{
-    foundation::numerics::Vector2,
-    ui::composition::Compositor,
-    win32::{
-        system_services::{
+use bindings::Windows::{
+    Foundation::Numerics::Vector2,
+    UI::Composition::Compositor,
+    Win32::{
+        SystemServices::{
             CreateDispatcherQueueController, DispatcherQueueOptions,
             DISPATCHERQUEUE_THREAD_APARTMENTTYPE, DISPATCHERQUEUE_THREAD_TYPE,
         },
-        windows_and_messaging::HWND,
-        winrt::ICompositorDesktopInterop,
+        WindowsAndMessaging::HWND,
+        WinRT::ICompositorDesktopInterop,
     },
 };
 use composition_host::CompositionHost;
 use raw_window_handle::HasRawWindowHandle;
-use windows::{Interface, FALSE};
+use windows::Interface;
 use winit::{
     event::{ElementState, Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
@@ -26,9 +26,9 @@ fn run() -> windows::Result<()> {
     windows::initialize_sta()?;
 
     let options = DispatcherQueueOptions {
-        dw_size: std::mem::size_of::<DispatcherQueueOptions>() as u32,
-        thread_type: DISPATCHERQUEUE_THREAD_TYPE::DQTYPE_THREAD_CURRENT,
-        apartment_type: DISPATCHERQUEUE_THREAD_APARTMENTTYPE::DQTAT_COM_NONE,
+        dwSize: std::mem::size_of::<DispatcherQueueOptions>() as u32,
+        threadType: DISPATCHERQUEUE_THREAD_TYPE::DQTYPE_THREAD_CURRENT,
+        apartmentType: DISPATCHERQUEUE_THREAD_APARTMENTTYPE::DQTAT_COM_NONE,
     };
     let _controller = unsafe {
         let mut result = None;
@@ -56,14 +56,14 @@ fn run() -> windows::Result<()> {
 
     let target = unsafe {
         compositor_desktop
-            .CreateDesktopWindowTarget(HWND(window_handle as isize), FALSE, &mut result)
+            .CreateDesktopWindowTarget(HWND(window_handle as isize), false, &mut result)
             .and_some(result)?
     };
 
     // Create composition root.
-    let container_visual = compositor.create_container_visual()?;
-    container_visual.set_relative_size_adjustment(Vector2 { x: 1.0, y: 1.0 })?;
-    target.set_root(&container_visual)?;
+    let container_visual = compositor.CreateContainerVisual()?;
+    container_visual.SetRelativeSizeAdjustment(Vector2 { X: 1.0, Y: 1.0 })?;
+    target.SetRoot(&container_visual)?;
 
     // Create composition host.
     let window_size = window.inner_size();

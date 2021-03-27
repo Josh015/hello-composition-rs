@@ -1,7 +1,7 @@
-use bindings::windows::{
-    foundation::numerics::{Vector2, Vector3},
-    ui::{
-        composition::{Compositor, ContainerVisual, SpriteVisual},
+use bindings::Windows::{
+    Foundation::Numerics::{Vector2, Vector3},
+    UI::{
+        Composition::{Compositor, ContainerVisual, SpriteVisual},
         Color,
     },
 };
@@ -26,7 +26,7 @@ impl CompositionHost {
     ) -> windows::Result<Self> {
         Ok(Self {
             container_visual: container_visual.clone(),
-            compositor: container_visual.compositor()?.clone(),
+            compositor: container_visual.Compositor()?.clone(),
             width,
             height,
         })
@@ -37,43 +37,43 @@ impl CompositionHost {
         let size = rng.gen_range(50, 150);
         let offset_x = rng.gen_range(0, self.width - size);
         let offset_y = rng.gen_range(0, (self.height / 2) - size);
-        let visual = self.compositor.create_sprite_visual()?;
+        let visual = self.compositor.CreateSpriteVisual()?;
 
-        visual.set_size(Vector2 {
-            x: size as f32,
-            y: size as f32,
+        visual.SetSize(Vector2 {
+            X: size as f32,
+            Y: size as f32,
         })?;
-        visual.set_brush(
+        visual.SetBrush(
             self.compositor
-                .create_color_brush_with_color(Self::get_random_color())?,
+                .CreateColorBrushWithColor(Self::get_random_color())?,
         )?;
-        visual.set_offset(Vector3 {
-            x: offset_x as f32,
-            y: offset_y as f32,
-            z: 0.0,
+        visual.SetOffset(Vector3 {
+            X: offset_x as f32,
+            Y: offset_y as f32,
+            Z: 0.0,
         })?;
-        self.container_visual.children()?.insert_at_top(&visual)?;
+        self.container_visual.Children()?.InsertAtTop(&visual)?;
         self.animate_square(&visual)?;
 
         Ok(())
     }
 
     fn animate_square(&self, visual: &SpriteVisual) -> windows::Result<()> {
-        let offset_x = visual.offset()?.x;
-        let animation = self.compositor.create_vector3_key_frame_animation()?;
-        let bottom = self.height as f32 - visual.size()?.y;
+        let offset_x = visual.Offset()?.X;
+        let animation = self.compositor.CreateVector3KeyFrameAnimation()?;
+        let bottom = self.height as f32 - visual.Size()?.Y;
 
-        animation.insert_key_frame(
+        animation.InsertKeyFrame(
             1.0,
             Vector3 {
-                x: offset_x,
-                y: bottom,
-                z: 0.0,
+                X: offset_x,
+                Y: bottom,
+                Z: 0.0,
             },
         )?;
-        animation.set_duration(Duration::from_secs(2))?;
-        animation.set_delay_time(Duration::from_secs(3))?;
-        visual.start_animation("Offset", animation)?;
+        animation.SetDuration(Duration::from_secs(2))?;
+        animation.SetDelayTime(Duration::from_secs(3))?;
+        visual.StartAnimation("Offset", animation)?;
 
         Ok(())
     }
@@ -85,6 +85,6 @@ impl CompositionHost {
         let g = die.sample(&mut rng);
         let b = die.sample(&mut rng);
 
-        Color { a: 255, r, g, b }
+        Color { A: 255, R: r, G: g, B: b }
     }
 }
