@@ -2,15 +2,17 @@ mod composition_host;
 
 use bindings::Windows::{
     Foundation::Numerics::Vector2,
-    UI::Composition::Compositor,
     Win32::{
-        SystemServices::{
-            CreateDispatcherQueueController, DispatcherQueueOptions,
-            DISPATCHERQUEUE_THREAD_APARTMENTTYPE, DISPATCHERQUEUE_THREAD_TYPE,
+        System::{
+            SystemServices::{
+                CreateDispatcherQueueController, DispatcherQueueOptions, DQTAT_COM_NONE,
+                DQTYPE_THREAD_CURRENT,
+            },
+            WinRT::ICompositorDesktopInterop,
         },
-        WindowsAndMessaging::HWND,
-        WinRT::ICompositorDesktopInterop,
+        UI::WindowsAndMessaging::HWND,
     },
+    UI::Composition::Compositor,
 };
 use composition_host::CompositionHost;
 use raw_window_handle::HasRawWindowHandle;
@@ -27,8 +29,8 @@ fn run() -> windows::Result<()> {
 
     let options = DispatcherQueueOptions {
         dwSize: std::mem::size_of::<DispatcherQueueOptions>() as u32,
-        threadType: DISPATCHERQUEUE_THREAD_TYPE::DQTYPE_THREAD_CURRENT,
-        apartmentType: DISPATCHERQUEUE_THREAD_APARTMENTTYPE::DQTAT_COM_NONE,
+        threadType: DQTYPE_THREAD_CURRENT,
+        apartmentType: DQTAT_COM_NONE,
     };
     let _controller = unsafe {
         let mut result = None;

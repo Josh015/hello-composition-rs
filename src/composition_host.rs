@@ -1,8 +1,8 @@
 use bindings::Windows::{
     Foundation::Numerics::{Vector2, Vector3},
     UI::{
-        Composition::{Compositor, ContainerVisual, SpriteVisual},
         Color,
+        Composition::{Compositor, ContainerVisual, SpriteVisual},
     },
 };
 use rand::{
@@ -34,9 +34,9 @@ impl CompositionHost {
 
     pub fn add_element(&self) -> windows::Result<()> {
         let mut rng = rand::thread_rng();
-        let size = rng.gen_range(50, 150);
-        let offset_x = rng.gen_range(0, self.width - size);
-        let offset_y = rng.gen_range(0, (self.height / 2) - size);
+        let size = rng.gen_range(50..150);
+        let offset_x = rng.gen_range(0..self.width - size);
+        let offset_y = rng.gen_range(0..(self.height / 2) - size);
         let visual = self.compositor.CreateSpriteVisual()?;
 
         visual.SetSize(Vector2 {
@@ -85,6 +85,11 @@ impl CompositionHost {
         let g = die.sample(&mut rng);
         let b = die.sample(&mut rng);
 
-        Color { A: 255, R: r, G: g, B: b }
+        Color {
+            A: 255,
+            R: r,
+            G: g,
+            B: b,
+        }
     }
 }
