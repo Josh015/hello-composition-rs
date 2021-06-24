@@ -1,16 +1,20 @@
 {
   "cSpell.words": [
+    "APARTMENTTYPE",
     "consts",
+    "DISPATCHERQUEUE",
     "DQTAT",
     "DQTYPE",
     "fira",
     "HRESULT",
+    "HWND",
     "lerp",
     "msaa",
     "randomizer",
     "rrggbb",
     "voxel",
-    "voxels"
+    "voxels",
+    "winit"
   ],
   "editor.defaultFormatter": "matklad.rust-analyzer",
   "editor.formatOnSave": true
