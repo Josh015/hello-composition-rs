@@ -3,14 +3,11 @@ mod composition_host;
 use bindings::Windows::{
     Foundation::Numerics::Vector2,
     Win32::{
-        System::{
-            SystemServices::{
-                CreateDispatcherQueueController, DispatcherQueueOptions,
-                DQTAT_COM_NONE, DQTYPE_THREAD_CURRENT,
-            },
-            WinRT::ICompositorDesktopInterop,
+        Foundation::HWND,
+        System::WinRT::{
+            CreateDispatcherQueueController, DispatcherQueueOptions,
+            ICompositorDesktopInterop, DQTAT_COM_NONE, DQTYPE_THREAD_CURRENT,
         },
-        UI::WindowsAndMessaging::HWND,
     },
     UI::Composition::Compositor,
 };

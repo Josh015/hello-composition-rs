@@ -1,5 +1,5 @@
 fn main() {
-    windows::build!(
+    windows::build! {
         Windows::Foundation::Numerics::{Vector2, Vector3},
         Windows::Foundation::TimeSpan,
         Windows::Graphics::SizeInt32,
@@ -14,10 +14,10 @@ fn main() {
             Vector3KeyFrameAnimation, VisualCollection,
         },
         Windows::UI::{Color, Colors},
-        Windows::Win32::System::SystemServices::{
-            CreateDispatcherQueueController, BOOL, DQTYPE_THREAD_CURRENT, DQTAT_COM_NONE,
+        Windows::Win32::Foundation::{BOOL, HWND},
+        Windows::Win32::System::WinRT::{
+            ICompositorDesktopInterop, CreateDispatcherQueueController,
+            DISPATCHERQUEUE_THREAD_TYPE, DISPATCHERQUEUE_THREAD_APARTMENTTYPE,
         },
-        Windows::Win32::UI::WindowsAndMessaging::HWND,
-        Windows::Win32::System::WinRT::ICompositorDesktopInterop,
-    );
+    };
 }
