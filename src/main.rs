@@ -5,8 +5,8 @@ use bindings::Windows::{
     Win32::{
         System::{
             SystemServices::{
-                CreateDispatcherQueueController, DispatcherQueueOptions, DQTAT_COM_NONE,
-                DQTYPE_THREAD_CURRENT,
+                CreateDispatcherQueueController, DispatcherQueueOptions,
+                DQTAT_COM_NONE, DQTYPE_THREAD_CURRENT,
             },
             WinRT::ICompositorDesktopInterop,
         },
@@ -34,7 +34,8 @@ fn run() -> windows::Result<()> {
     };
     let _controller = unsafe {
         let mut result = None;
-        CreateDispatcherQueueController(options, &mut result).and_some(result)?
+        CreateDispatcherQueueController(options, &mut result)
+            .and_some(result)?
     };
 
     // Create window.
@@ -49,7 +50,9 @@ fn run() -> windows::Result<()> {
     let compositor = Compositor::new()?;
     let window_handle = window.raw_window_handle();
     let window_handle = match window_handle {
-        raw_window_handle::RawWindowHandle::Windows(window_handle) => window_handle.hwnd,
+        raw_window_handle::RawWindowHandle::Windows(window_handle) => {
+            window_handle.hwnd
+        }
         _ => panic!("Unsupported platform!"),
     };
 
@@ -58,7 +61,11 @@ fn run() -> windows::Result<()> {
 
     let target = unsafe {
         compositor_desktop
-            .CreateDesktopWindowTarget(HWND(window_handle as isize), false, &mut result)
+            .CreateDesktopWindowTarget(
+                HWND(window_handle as isize),
+                false,
+                &mut result,
+            )
             .and_some(result)?
     };
 
@@ -69,7 +76,11 @@ fn run() -> windows::Result<()> {
 
     // Create composition host.
     let window_size = window.inner_size();
-    let comp_host = CompositionHost::new(&container_visual, window_size.width, window_size.height)?;
+    let comp_host = CompositionHost::new(
+        &container_visual,
+        window_size.width,
+        window_size.height,
+    )?;
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;

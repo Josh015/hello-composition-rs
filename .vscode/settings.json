@@ -1,0 +1,17 @@
+{
+  "cSpell.words": [
+    "consts",
+    "DQTAT",
+    "DQTYPE",
+    "fira",
+    "HRESULT",
+    "lerp",
+    "msaa",
+    "randomizer",
+    "rrggbb",
+    "voxel",
+    "voxels"
+  ],
+  "editor.defaultFormatter": "matklad.rust-analyzer",
+  "editor.formatOnSave": true
+}
