@@ -29,11 +29,7 @@ fn run() -> windows::Result<()> {
         threadType: DQTYPE_THREAD_CURRENT,
         apartmentType: DQTAT_COM_NONE,
     };
-    let _controller = unsafe {
-        let mut result = None;
-        CreateDispatcherQueueController(options, &mut result)
-            .and_some(result)?
-    };
+    let _controller = unsafe { CreateDispatcherQueueController(options)? };
 
     // Create window.
     let event_loop = EventLoop::new();
@@ -54,16 +50,10 @@ fn run() -> windows::Result<()> {
     };
 
     let compositor_desktop: ICompositorDesktopInterop = compositor.cast()?;
-    let mut result = None;
 
     let target = unsafe {
         compositor_desktop
-            .CreateDesktopWindowTarget(
-                HWND(window_handle as isize),
-                false,
-                &mut result,
-            )
-            .and_some(result)?
+            .CreateDesktopWindowTarget(HWND(window_handle as isize), false)?
     };
 
     // Create composition root.
