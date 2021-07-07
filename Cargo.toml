@@ -5,7 +5,7 @@ authors = ["Joshua Ols <joshua.d.ols@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-windows = "0.14.0"
+windows = "0.15.0"
 # windows = { git = "https://github.com/microsoft/windows-rs.git" }
 bindings = { path = "bindings" }
 winit = "0.24.0"

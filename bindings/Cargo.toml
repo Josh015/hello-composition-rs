@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2018"
 
 [dependencies]
-windows = "0.14.0"
+windows = "0.15.0"
 # windows = { git = "https://github.com/microsoft/windows-rs.git" }
 
 [build-dependencies]
-windows = "0.14.0"
+windows = "0.15.0"
 # windows = { git = "https://github.com/microsoft/windows-rs.git" }
