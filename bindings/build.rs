@@ -1,5 +1,6 @@
 fn main() {
     windows::build! {
+        Windows::Win32::System::Com::CoInitializeEx,
         Windows::Win32::System::WinRT::{
             CreateDispatcherQueueController, ICompositorDesktopInterop,
         },

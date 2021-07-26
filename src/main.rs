@@ -4,9 +4,13 @@ use bindings::Windows::{
     Foundation::Numerics::Vector2,
     Win32::{
         Foundation::HWND,
-        System::WinRT::{
-            CreateDispatcherQueueController, DispatcherQueueOptions,
-            ICompositorDesktopInterop, DQTAT_COM_NONE, DQTYPE_THREAD_CURRENT,
+        System::{
+            Com::{CoInitializeEx, COINIT_APARTMENTTHREADED},
+            WinRT::{
+                CreateDispatcherQueueController, DispatcherQueueOptions,
+                ICompositorDesktopInterop, DQTAT_COM_NONE,
+                DQTYPE_THREAD_CURRENT,
+            },
         },
     },
     UI::Composition::Compositor,
@@ -22,7 +26,7 @@ use winit::{
 
 fn run() -> windows::Result<()> {
     // Ensure dispatcher queue.
-    windows::initialize_sta()?;
+    unsafe { CoInitializeEx(std::ptr::null_mut(), COINIT_APARTMENTTHREADED)? };
 
     let options = DispatcherQueueOptions {
         dwSize: std::mem::size_of::<DispatcherQueueOptions>() as u32,
