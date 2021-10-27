@@ -1,6 +1,9 @@
 mod composition_host;
 
-use bindings::Windows::{
+use composition_host::CompositionHost;
+use raw_window_handle::HasRawWindowHandle;
+use windows::{
+    runtime::{Interface, Result},
     Foundation::Numerics::Vector2,
     Win32::{
         Foundation::HWND,
@@ -15,16 +18,13 @@ use bindings::Windows::{
     },
     UI::Composition::Compositor,
 };
-use composition_host::CompositionHost;
-use raw_window_handle::HasRawWindowHandle;
-use windows::Interface;
 use winit::{
     event::{ElementState, Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
 
-fn run() -> windows::Result<()> {
+fn run() -> Result<()> {
     // Ensure dispatcher queue.
     unsafe { CoInitializeEx(std::ptr::null_mut(), COINIT_APARTMENTTHREADED)? };
 

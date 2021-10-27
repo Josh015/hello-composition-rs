@@ -1,15 +1,16 @@
-use bindings::Windows::{
+use rand::{
+    distributions::{Distribution, Uniform},
+    prelude::*,
+};
+use std::time::Duration;
+use windows::{
+    runtime::Result,
     Foundation::Numerics::{Vector2, Vector3},
     UI::{
         Color,
         Composition::{Compositor, ContainerVisual, SpriteVisual},
     },
 };
-use rand::{
-    distributions::{Distribution, Uniform},
-    prelude::*,
-};
-use std::time::Duration;
 
 pub struct CompositionHost {
     container_visual: ContainerVisual,
@@ -23,7 +24,7 @@ impl CompositionHost {
         container_visual: &ContainerVisual,
         width: u32,
         height: u32,
-    ) -> windows::Result<Self> {
+    ) -> Result<Self> {
         Ok(Self {
             container_visual: container_visual.clone(),
             compositor: container_visual.Compositor()?.clone(),
@@ -32,7 +33,7 @@ impl CompositionHost {
         })
     }
 
-    pub fn add_element(&self) -> windows::Result<()> {
+    pub fn add_element(&self) -> Result<()> {
         let mut rng = rand::thread_rng();
         let size = rng.gen_range(50..150);
         let offset_x = rng.gen_range(0..self.width - size);
@@ -58,7 +59,7 @@ impl CompositionHost {
         Ok(())
     }
 
-    fn animate_square(&self, visual: &SpriteVisual) -> windows::Result<()> {
+    fn animate_square(&self, visual: &SpriteVisual) -> Result<()> {
         let offset_x = visual.Offset()?.X;
         let animation = self.compositor.CreateVector3KeyFrameAnimation()?;
         let bottom = self.height as f32 - visual.Size()?.Y;

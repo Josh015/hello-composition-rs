@@ -22,13 +22,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bindings"
-version = "0.1.0"
-dependencies = [
- "windows",
-]
-
-[[package]]
 name = "bitflags"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -98,12 +91,6 @@ dependencies = [
  "libc",
  "objc",
 ]
-
-[[package]]
-name = "const-sha1"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb58b6451e8c2a812ad979ed1d83378caa5e927eef2622017a45f251457c2c9d"
 
 [[package]]
 name = "core-foundation"
@@ -315,7 +302,6 @@ dependencies = [
 name = "hello-composition-rs"
 version = "0.1.0"
 dependencies = [
- "bindings",
  "rand",
  "raw-window-handle",
  "windows",
@@ -1022,30 +1008,22 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "windows"
-version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "68088239696c06152844eadc03d262f088932cce50c67e4ace86e19d95e976fe"
+version = "0.22.1"
+source = "git+https://github.com/microsoft/windows-rs#f687137697350910de5b31f174d9940a16cb93f6"
 dependencies = [
- "const-sha1",
- "windows_gen",
- "windows_macros",
+ "windows_i686_msvc",
+ "windows_x86_64_msvc",
 ]
 
 [[package]]
-name = "windows_gen"
-version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf583322dc423ee021035b358e535015f7fd163058a31e2d37b99a939141121d"
+name = "windows_i686_msvc"
+version = "0.22.1"
+source = "git+https://github.com/microsoft/windows-rs#f687137697350910de5b31f174d9940a16cb93f6"
 
 [[package]]
-name = "windows_macros"
-version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58acfb8832e9f707f8997bd161e537a1c1f603e60a5bd9c3cf53484fdcc998f3"
-dependencies = [
- "syn",
- "windows_gen",
-]
+name = "windows_x86_64_msvc"
+version = "0.22.1"
+source = "git+https://github.com/microsoft/windows-rs#f687137697350910de5b31f174d9940a16cb93f6"
 
 [[package]]
 name = "winit"
