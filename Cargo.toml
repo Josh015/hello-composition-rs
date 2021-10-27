@@ -5,9 +5,9 @@ authors = ["Joshua Ols <joshua.d.ols@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-winit = "0.24.0"
+winit = "0.25.0"
 raw-window-handle = "0.3.3"
-rand = "0.8.3"
+rand = "0.8.4"
 
 [dependencies.windows]
 git = "https://github.com/microsoft/windows-rs"
