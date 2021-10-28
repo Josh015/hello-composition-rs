@@ -10,7 +10,8 @@ raw-window-handle = "0.3.3"
 rand = "0.8.4"
 
 [dependencies.windows]
-git = "https://github.com/microsoft/windows-rs"
+# git = "https://github.com/microsoft/windows-rs"
+version = "0.22.1"
 features = [
     "Foundation_Collections",
     "Foundation_Numerics",

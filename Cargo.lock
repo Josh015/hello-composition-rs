@@ -1063,7 +1063,8 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 [[package]]
 name = "windows"
 version = "0.22.1"
-source = "git+https://github.com/microsoft/windows-rs#f687137697350910de5b31f174d9940a16cb93f6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e63b5b81676d36bcf3d8c41b0f6ca574bb2399ba0963c6b9f110f7839a200bce"
 dependencies = [
  "windows_i686_msvc",
  "windows_x86_64_msvc",
@@ -1072,12 +1073,14 @@ dependencies = [
 [[package]]
 name = "windows_i686_msvc"
 version = "0.22.1"
-source = "git+https://github.com/microsoft/windows-rs#f687137697350910de5b31f174d9940a16cb93f6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "23330f18aae0ccad49809c82a48e01e965bcc831813f32fe1bb89d8845f7365b"
 
 [[package]]
 name = "windows_x86_64_msvc"
 version = "0.22.1"
-source = "git+https://github.com/microsoft/windows-rs#f687137697350910de5b31f174d9940a16cb93f6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be253f6efe83a48d5d42d13be30ac63ac597f7d87b09c7fd37221a5a04d09628"
 
 [[package]]
 name = "winit"
