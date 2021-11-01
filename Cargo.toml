@@ -11,7 +11,7 @@ rand = "0.8.4"
 
 [dependencies.windows]
 # git = "https://github.com/microsoft/windows-rs"
-version = "0.23.0"
+version = "0.24.0"
 features = [
     "Foundation_Numerics",
     "System",
