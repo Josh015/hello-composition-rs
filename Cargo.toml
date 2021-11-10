@@ -12,12 +12,13 @@ rand = "0.8.4"
 
 [dependencies.windows]
 # git = "https://github.com/microsoft/windows-rs"
-version = "0.25.0"
+version = "0.26.0"
 features = [
+    "std",
     "Foundation_Numerics",
     "System",
     "UI_Composition_Desktop",
     "Win32_Foundation",
     "Win32_System_Com",
-    "Win32_System_WinRT",
+    "Win32_System_WinRT_Composition",
 ]

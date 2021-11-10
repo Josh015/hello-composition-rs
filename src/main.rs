@@ -10,9 +10,9 @@ use windows::{
         System::{
             Com::{CoInitializeEx, COINIT_APARTMENTTHREADED},
             WinRT::{
+                Composition::ICompositorDesktopInterop,
                 CreateDispatcherQueueController, DispatcherQueueOptions,
-                ICompositorDesktopInterop, DQTAT_COM_NONE,
-                DQTYPE_THREAD_CURRENT,
+                DQTAT_COM_NONE, DQTYPE_THREAD_CURRENT,
             },
         },
     },
