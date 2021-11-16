@@ -4,7 +4,7 @@ use rand::{
 };
 use std::time::Duration;
 use windows::{
-    runtime::Result,
+    core::Result,
     Foundation::Numerics::{Vector2, Vector3},
     UI::{
         Color,
