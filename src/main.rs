@@ -46,9 +46,9 @@ fn run() -> Result<()> {
     // Create desktop window target.
     let compositor = Compositor::new()?;
     let window_handle = window.raw_window_handle();
-    let window_handle = match window_handle {
-        raw_window_handle::RawWindowHandle::Windows(window_handle) => {
-            window_handle.hwnd
+    let hwnd = match window_handle {
+        raw_window_handle::RawWindowHandle::Windows(windows_handle) => {
+            windows_handle.hwnd
         }
         _ => panic!("Unsupported platform!"),
     };
@@ -57,7 +57,7 @@ fn run() -> Result<()> {
 
     let target = unsafe {
         compositor_desktop
-            .CreateDesktopWindowTarget(HWND(window_handle as isize), false)?
+            .CreateDesktopWindowTarget(HWND(hwnd as isize), false)?
     };
 
     // Create composition root.
@@ -81,12 +81,14 @@ fn run() -> Result<()> {
                 window_id,
             } if window_id == window.id() => *control_flow = ControlFlow::Exit,
             Event::WindowEvent {
-                event: WindowEvent::MouseInput { state, .. },
+                event:
+                    WindowEvent::MouseInput {
+                        state: ElementState::Pressed,
+                        ..
+                    },
                 ..
             } => {
-                if state == ElementState::Pressed {
-                    comp_host.add_element().unwrap();
-                }
+                comp_host.add_element().unwrap();
             }
             _ => (),
         }
