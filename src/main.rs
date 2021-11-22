@@ -19,7 +19,7 @@ use windows::{
     UI::Composition::Compositor,
 };
 use winit::{
-    event::{ElementState, Event, WindowEvent},
+    event::{ElementState, Event, MouseButton, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
@@ -38,7 +38,7 @@ fn run() -> Result<()> {
     // Create window.
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
-        .with_title("Click to add composition elements...")
+        .with_title("Left click to add composition elements...")
         .with_resizable(false)
         .build(&event_loop)
         .unwrap();
@@ -84,6 +84,7 @@ fn run() -> Result<()> {
                 event:
                     WindowEvent::MouseInput {
                         state: ElementState::Pressed,
+                        button: MouseButton::Left,
                         ..
                     },
                 ..
