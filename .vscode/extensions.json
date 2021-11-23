@@ -16,6 +16,9 @@
     // TOML syntax highlighting.
     "tamasfe.even-better-toml",
 
+    // Needed for debugging support.
+    "ms-vscode.cpptools",
+
     // Better than RLS, also needed for rustfmt on save.
     "matklad.rust-analyzer",
 
