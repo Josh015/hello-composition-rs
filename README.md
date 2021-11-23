@@ -19,7 +19,7 @@ This sample includes the following features:
 
 Running this sample requires at least Windows build 1803 (v10.0.17134.0). To compile and run, use [cargo](https://www.rust-lang.org/learn/get-started):
 
-```
+```shell
 cargo run --release
 ```
 
