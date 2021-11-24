@@ -49,7 +49,7 @@ fn run() -> Result<()> {
     let hwnd = match window_handle {
         raw_window_handle::RawWindowHandle::Windows(windows_handle) => {
             windows_handle.hwnd
-        }
+        },
         _ => panic!("Unsupported platform!"),
     };
 
@@ -90,7 +90,7 @@ fn run() -> Result<()> {
                 ..
             } => {
                 comp_host.add_element().unwrap();
-            }
+            },
             _ => (),
         }
     });
