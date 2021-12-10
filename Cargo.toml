@@ -6,8 +6,8 @@ rust-version = "1.56"
 edition = "2021"
 
 [dependencies]
-winit = "0.25.0"
-raw-window-handle = "0.3.3"
+winit = "0.26.0"
+raw-window-handle = "0.4.2"
 rand = "0.8.4"
 
 [dependencies.windows]

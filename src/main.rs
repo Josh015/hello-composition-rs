@@ -47,7 +47,7 @@ fn run() -> Result<()> {
     let compositor = Compositor::new()?;
     let window_handle = window.raw_window_handle();
     let hwnd = match window_handle {
-        raw_window_handle::RawWindowHandle::Windows(windows_handle) => {
+        raw_window_handle::RawWindowHandle::Win32(windows_handle) => {
             windows_handle.hwnd
         },
         _ => panic!("Unsupported platform!"),
