@@ -5,12 +5,15 @@ use raw_window_handle::HasRawWindowHandle;
 use windows::{
     core::{Interface, Result},
     Foundation::Numerics::Vector2,
-    Win32::System::{
-        Com::{CoInitializeEx, COINIT_APARTMENTTHREADED},
-        WinRT::{
-            Composition::ICompositorDesktopInterop,
-            CreateDispatcherQueueController, DispatcherQueueOptions,
-            DQTAT_COM_NONE, DQTYPE_THREAD_CURRENT,
+    Win32::{
+        Foundation::HWND,
+        System::{
+            Com::{CoInitializeEx, COINIT_APARTMENTTHREADED},
+            WinRT::{
+                Composition::ICompositorDesktopInterop,
+                CreateDispatcherQueueController, DispatcherQueueOptions,
+                DQTAT_COM_NONE, DQTYPE_THREAD_CURRENT,
+            },
         },
     },
     UI::Composition::Compositor,
@@ -53,7 +56,8 @@ fn run() -> Result<()> {
     let compositor_desktop: ICompositorDesktopInterop = compositor.cast()?;
 
     let target = unsafe {
-        compositor_desktop.CreateDesktopWindowTarget(hwnd as isize, false)?
+        compositor_desktop
+            .CreateDesktopWindowTarget(HWND(hwnd as isize), false)?
     };
 
     // Create composition root.
