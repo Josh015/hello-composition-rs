@@ -46,7 +46,7 @@ impl CompositionHost {
         })?;
         visual.SetBrush(
             self.compositor
-                .CreateColorBrushWithColor(Self::get_random_color())?,
+                .CreateColorBrushWithColor(get_random_color())?,
         )?;
         visual.SetOffset(Vector3 {
             X: offset_x as f32,
@@ -78,19 +78,19 @@ impl CompositionHost {
 
         Ok(())
     }
+}
 
-    fn get_random_color() -> Color {
-        let mut rng = rand::thread_rng();
-        let die = Uniform::from(0..=255);
-        let r = die.sample(&mut rng);
-        let g = die.sample(&mut rng);
-        let b = die.sample(&mut rng);
+fn get_random_color() -> Color {
+    let mut rng = rand::thread_rng();
+    let die = Uniform::from(0..=255);
+    let r = die.sample(&mut rng);
+    let g = die.sample(&mut rng);
+    let b = die.sample(&mut rng);
 
-        Color {
-            A: 255,
-            R: r,
-            G: g,
-            B: b,
-        }
+    Color {
+        A: 255,
+        R: r,
+        G: g,
+        B: b,
     }
 }
