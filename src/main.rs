@@ -26,7 +26,7 @@ use winit::{
 
 fn run() -> Result<()> {
     // Ensure dispatcher queue.
-    unsafe { CoInitializeEx(std::ptr::null_mut(), COINIT_APARTMENTTHREADED)? };
+    unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED)? };
 
     let options = DispatcherQueueOptions {
         dwSize: std::mem::size_of::<DispatcherQueueOptions>() as u32,

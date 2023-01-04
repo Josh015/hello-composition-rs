@@ -45,7 +45,8 @@ impl CompositionHost {
             Y: size as f32,
         })?;
         visual.SetBrush(
-            self.compositor
+            &self
+                .compositor
                 .CreateColorBrushWithColor(get_random_color())?,
         )?;
         visual.SetOffset(Vector3 {
@@ -72,9 +73,9 @@ impl CompositionHost {
                 Z: 0.0,
             },
         )?;
-        animation.SetDuration(Duration::from_secs(2))?;
-        animation.SetDelayTime(Duration::from_secs(3))?;
-        visual.StartAnimation("Offset", animation)?;
+        animation.SetDuration(Duration::from_secs(2).into())?;
+        animation.SetDelayTime(Duration::from_secs(3).into())?;
+        visual.StartAnimation(&"Offset".into(), &animation)?;
 
         Ok(())
     }
