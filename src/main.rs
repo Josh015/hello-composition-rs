@@ -20,7 +20,7 @@ use windows::{
 };
 use winit::{
     event::{ElementState, Event, MouseButton, WindowEvent},
-    event_loop::{ControlFlow, EventLoop},
+    event_loop::EventLoop,
     window::WindowBuilder,
 };
 
@@ -74,12 +74,12 @@ fn run() -> Result<()> {
     )?;
 
     event_loop.run(move |event, _, control_flow| {
-        *control_flow = ControlFlow::Wait;
+        control_flow.set_wait();
         match event {
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
                 window_id,
-            } if window_id == window.id() => *control_flow = ControlFlow::Exit,
+            } if window_id == window.id() => control_flow.set_exit(),
             Event::WindowEvent {
                 event:
                     WindowEvent::MouseInput {
