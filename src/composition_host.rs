@@ -5,6 +5,7 @@ use rand::{
 use std::time::Duration;
 use windows::{
     core::Result,
+    h,
     Foundation::Numerics::{Vector2, Vector3},
     UI::{
         Color,
@@ -75,7 +76,7 @@ impl CompositionHost {
         )?;
         animation.SetDuration(Duration::from_secs(2).into())?;
         animation.SetDelayTime(Duration::from_secs(3).into())?;
-        visual.StartAnimation(&"Offset".into(), &animation)?;
+        visual.StartAnimation(h!("Offset"), &animation)?;
 
         Ok(())
     }
