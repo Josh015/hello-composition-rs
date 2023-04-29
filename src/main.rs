@@ -3,7 +3,7 @@ mod composition_host;
 use composition_host::CompositionHost;
 use raw_window_handle::HasRawWindowHandle;
 use windows::{
-    core::{Interface, Result},
+    core::{ComInterface, Result},
     Foundation::Numerics::Vector2,
     Win32::{
         Foundation::HWND,
