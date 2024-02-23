@@ -1,9 +1,9 @@
 mod composition_host;
 
 use composition_host::CompositionHost;
-use raw_window_handle::HasRawWindowHandle;
+use raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use windows::{
-    core::{ComInterface, Result},
+    core::*,
     Foundation::Numerics::Vector2,
     Win32::{
         Foundation::HWND,
@@ -24,9 +24,9 @@ use winit::{
     window::WindowBuilder,
 };
 
-fn run() -> Result<()> {
+fn main() -> Result<()> {
     // Ensure dispatcher queue.
-    unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED)? };
+    unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED).ok()? };
 
     let options = DispatcherQueueOptions {
         dwSize: std::mem::size_of::<DispatcherQueueOptions>() as u32,
@@ -36,7 +36,7 @@ fn run() -> Result<()> {
     let _controller = unsafe { CreateDispatcherQueueController(options)? };
 
     // Create window.
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new().unwrap();
     let window = WindowBuilder::new()
         .with_title("Left click to add composition elements...")
         .with_resizable(false)
@@ -45,7 +45,7 @@ fn run() -> Result<()> {
 
     // Create desktop window target.
     let compositor = Compositor::new()?;
-    let window_handle = window.raw_window_handle();
+    let window_handle: RawWindowHandle = window.window_handle().unwrap().into();
     let hwnd = match window_handle {
         raw_window_handle::RawWindowHandle::Win32(windows_handle) => {
             windows_handle.hwnd
@@ -57,7 +57,7 @@ fn run() -> Result<()> {
 
     let target = unsafe {
         compositor_desktop
-            .CreateDesktopWindowTarget(HWND(hwnd as isize), false)?
+            .CreateDesktopWindowTarget(HWND(isize::from(hwnd)), false)?
     };
 
     // Create composition root.
@@ -73,34 +73,29 @@ fn run() -> Result<()> {
         window_size.height,
     )?;
 
-    event_loop.run(move |event, _, control_flow| {
-        control_flow.set_wait();
-        match event {
-            Event::WindowEvent {
-                event: WindowEvent::CloseRequested,
-                window_id,
-            } if window_id == window.id() => control_flow.set_exit(),
-            Event::WindowEvent {
-                event:
-                    WindowEvent::MouseInput {
-                        state: ElementState::Pressed,
-                        button: MouseButton::Left,
-                        ..
-                    },
-                ..
-            } => {
-                comp_host.add_element().unwrap();
-            },
-            _ => (),
-        }
-    });
-}
+    event_loop
+        .run(move |event, event_loop| {
+            event_loop.set_control_flow(winit::event_loop::ControlFlow::Wait);
+            match event {
+                Event::WindowEvent {
+                    event: WindowEvent::CloseRequested,
+                    ..
+                } => event_loop.exit(),
+                Event::WindowEvent {
+                    event:
+                        WindowEvent::MouseInput {
+                            state: ElementState::Pressed,
+                            button: MouseButton::Left,
+                            ..
+                        },
+                    ..
+                } => {
+                    comp_host.add_element().unwrap();
+                },
+                _ => (),
+            }
+        })
+        .unwrap();
 
-fn main() {
-    let result = run();
-
-    // We do this for nicer HRESULT printing when errors occur.
-    if let Err(error) = result {
-        error.code().unwrap();
-    }
+    Ok(())
 }
