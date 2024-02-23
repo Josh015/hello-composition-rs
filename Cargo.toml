@@ -6,9 +6,10 @@ rust-version = "1.56"
 edition = "2021"
 
 [dependencies]
-winit = "0.29.10"
-raw-window-handle = "0.6.0"
+anyhow = "1.0.80"
 rand = "0.8.5"
+raw-window-handle = "0.6.0"
+winit = "0.29.10"
 
 [dependencies.windows]
 # git = "https://github.com/microsoft/windows-rs"

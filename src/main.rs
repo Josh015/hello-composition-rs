@@ -24,7 +24,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-fn main() -> Result<()> {
+fn main() -> anyhow::Result<()> {
     // Ensure dispatcher queue.
     unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED).ok()? };
 
@@ -36,16 +36,15 @@ fn main() -> Result<()> {
     let _controller = unsafe { CreateDispatcherQueueController(options)? };
 
     // Create window.
-    let event_loop = EventLoop::new().unwrap();
+    let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
         .with_title("Left click to add composition elements...")
         .with_resizable(false)
-        .build(&event_loop)
-        .unwrap();
+        .build(&event_loop)?;
 
     // Create desktop window target.
     let compositor = Compositor::new()?;
-    let window_handle: RawWindowHandle = window.window_handle().unwrap().into();
+    let window_handle: RawWindowHandle = window.window_handle()?.into();
     let hwnd = match window_handle {
         raw_window_handle::RawWindowHandle::Win32(windows_handle) => {
             windows_handle.hwnd
@@ -73,29 +72,27 @@ fn main() -> Result<()> {
         window_size.height,
     )?;
 
-    event_loop
-        .run(move |event, event_loop| {
-            event_loop.set_control_flow(winit::event_loop::ControlFlow::Wait);
-            match event {
-                Event::WindowEvent {
-                    event: WindowEvent::CloseRequested,
-                    ..
-                } => event_loop.exit(),
-                Event::WindowEvent {
-                    event:
-                        WindowEvent::MouseInput {
-                            state: ElementState::Pressed,
-                            button: MouseButton::Left,
-                            ..
-                        },
-                    ..
-                } => {
-                    comp_host.add_element().unwrap();
-                },
-                _ => (),
-            }
-        })
-        .unwrap();
+    event_loop.run(move |event, event_loop| {
+        event_loop.set_control_flow(winit::event_loop::ControlFlow::Wait);
+        match event {
+            Event::WindowEvent {
+                event: WindowEvent::CloseRequested,
+                ..
+            } => event_loop.exit(),
+            Event::WindowEvent {
+                event:
+                    WindowEvent::MouseInput {
+                        state: ElementState::Pressed,
+                        button: MouseButton::Left,
+                        ..
+                    },
+                ..
+            } => {
+                comp_host.add_element().unwrap();
+            },
+            _ => (),
+        }
+    })?;
 
     Ok(())
 }
