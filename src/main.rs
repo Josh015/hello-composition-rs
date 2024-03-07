@@ -47,17 +47,15 @@ fn main() -> anyhow::Result<()> {
     let window_handle: RawWindowHandle = window.window_handle()?.into();
     let hwnd = match window_handle {
         raw_window_handle::RawWindowHandle::Win32(windows_handle) => {
-            windows_handle.hwnd
+            HWND(windows_handle.hwnd.into())
         },
         _ => panic!("Unsupported platform!"),
     };
 
     let compositor_desktop: ICompositorDesktopInterop = compositor.cast()?;
 
-    let target = unsafe {
-        compositor_desktop
-            .CreateDesktopWindowTarget(HWND(isize::from(hwnd)), false)?
-    };
+    let target =
+        unsafe { compositor_desktop.CreateDesktopWindowTarget(hwnd, false)? };
 
     // Create composition root.
     let container_visual = compositor.CreateContainerVisual()?;
