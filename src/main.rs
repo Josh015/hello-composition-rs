@@ -35,30 +35,27 @@ fn main() -> anyhow::Result<()> {
     };
     let _controller = unsafe { CreateDispatcherQueueController(options)? };
 
-    // Create window.
+    // Create window and obtain handle.
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
         .with_title("Left click to add composition elements...")
         .with_resizable(false)
         .build(&event_loop)?;
-
-    // Create desktop window target.
-    let compositor = Compositor::new()?;
-    let window_handle: RawWindowHandle = window.window_handle()?.into();
-    let hwnd = match window_handle {
-        raw_window_handle::RawWindowHandle::Win32(windows_handle) => {
-            HWND(windows_handle.hwnd.into())
+    let raw_window_handle = window.window_handle()?.into();
+    let hwnd = match raw_window_handle {
+        RawWindowHandle::Win32(window_handle) => {
+            HWND(window_handle.hwnd.into())
         },
         _ => panic!("Unsupported platform!"),
     };
 
+    // Create compositor.
+    let compositor = Compositor::new()?;
     let compositor_desktop: ICompositorDesktopInterop = compositor.cast()?;
-
     let target =
         unsafe { compositor_desktop.CreateDesktopWindowTarget(hwnd, false)? };
-
-    // Create composition root.
     let container_visual = compositor.CreateContainerVisual()?;
+
     container_visual.SetRelativeSizeAdjustment(Vector2 { X: 1.0, Y: 1.0 })?;
     target.SetRoot(&container_visual)?;
 
