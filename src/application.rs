@@ -130,12 +130,19 @@ impl Application {
         let size = rng.random_range(50..150);
         let x = rng.random_range(0..window_size.width - size) as f32;
         let y = rng.random_range(0..(window_size.height / 2) - size) as f32;
+        let die = Uniform::try_from(0..=255).unwrap();
+        let r = die.sample(&mut rng);
+        let g = die.sample(&mut rng);
+        let b = die.sample(&mut rng);
 
-        element.SetBrush(
-            &self
-                .compositor
-                .CreateColorBrushWithColor(get_random_color())?,
-        )?;
+        element.SetBrush(&self.compositor.CreateColorBrushWithColor(
+            Color {
+                A: 255,
+                R: r,
+                G: g,
+                B: b,
+            },
+        )?)?;
         element.SetSize(Vector2 {
             X: size as f32,
             Y: size as f32,
@@ -161,20 +168,5 @@ impl Application {
         visuals.InsertAtTop(&element)?;
 
         Ok(())
-    }
-}
-
-fn get_random_color() -> Color {
-    let mut rng = rand::rng();
-    let die = Uniform::try_from(0..=255).unwrap();
-    let r = die.sample(&mut rng);
-    let g = die.sample(&mut rng);
-    let b = die.sample(&mut rng);
-
-    Color {
-        A: 255,
-        R: r,
-        G: g,
-        B: b,
     }
 }
