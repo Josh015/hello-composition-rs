@@ -127,9 +127,9 @@ impl Application {
         // Create randomized squares.
         let element = self.compositor.CreateSpriteVisual()?;
         let mut rng = rand::rng();
-        let size = rng.random_range(50..150);
-        let x = rng.random_range(0..window_size.width - size) as f32;
-        let y = rng.random_range(0..(window_size.height / 2) - size) as f32;
+        let size = rng.random_range(50..=150);
+        let x = rng.random_range(0..=window_size.width - size) as f32;
+        let y = rng.random_range(0..=(window_size.height / 2) - size) as f32;
         let die = Uniform::try_from(0..=255).unwrap();
         let r = die.sample(&mut rng);
         let g = die.sample(&mut rng);
