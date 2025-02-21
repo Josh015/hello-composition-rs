@@ -2,8 +2,8 @@
 name = "hello-composition-rs"
 version = "0.1.0"
 authors = ["Joshua Ols <joshua.d.ols@gmail.com>"]
-rust-version = "1.56"
-edition = "2021"
+edition = "2024"
+rust-version = "1.85.0"
 
 [dependencies]
 anyhow = "1.0.80"
