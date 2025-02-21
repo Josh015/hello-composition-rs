@@ -1,15 +1,12 @@
-use rand::{
-    distributions::{Distribution, Uniform},
-    prelude::*,
-};
+use rand::{distr::Uniform, prelude::*};
 use std::time::Duration;
 use windows::{
-    core::{h, Result},
     Foundation::Numerics::{Vector2, Vector3},
     UI::{
         Color,
         Composition::{Compositor, ContainerVisual, SpriteVisual},
     },
+    core::{Result, h},
 };
 
 pub struct CompositionHost {
@@ -34,10 +31,10 @@ impl CompositionHost {
     }
 
     pub fn add_element(&self) -> Result<()> {
-        let mut rng = rand::thread_rng();
-        let size = rng.gen_range(50..150);
-        let offset_x = rng.gen_range(0..self.width - size);
-        let offset_y = rng.gen_range(0..(self.height / 2) - size);
+        let mut rng = rand::rng();
+        let size = rng.random_range(50..150);
+        let offset_x = rng.random_range(0..self.width - size);
+        let offset_y = rng.random_range(0..(self.height / 2) - size);
         let visual = self.compositor.CreateSpriteVisual()?;
 
         visual.SetSize(Vector2 {
@@ -82,8 +79,8 @@ impl CompositionHost {
 }
 
 fn get_random_color() -> Color {
-    let mut rng = rand::thread_rng();
-    let die = Uniform::from(0..=255);
+    let mut rng = rand::rng();
+    let die = Uniform::try_from(0..=255).unwrap();
     let r = die.sample(&mut rng);
     let g = die.sample(&mut rng);
     let b = die.sample(&mut rng);
