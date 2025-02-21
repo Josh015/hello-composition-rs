@@ -39,7 +39,7 @@ pub struct Application {
 
 impl Default for Application {
     fn default() -> Self {
-        // Ensure dispatcher queue.
+        // Initialize.
         unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED).ok().unwrap() };
 
         let options = DispatcherQueueOptions {
@@ -49,8 +49,6 @@ impl Default for Application {
         };
         let controller =
             unsafe { CreateDispatcherQueueController(options).unwrap() };
-
-        // Create compositor and container.
         let compositor = Compositor::new().unwrap();
 
         Self {
@@ -87,7 +85,7 @@ impl ApplicationHandler for Application {
                 .unwrap()
         };
 
-        // Create composition host.
+        // Create composition root.
         let container_visual = self.compositor.CreateContainerVisual().unwrap();
 
         container_visual
@@ -122,46 +120,45 @@ impl ApplicationHandler for Application {
 
 impl Application {
     fn add_element(&self) -> Result<()> {
-        if let Ok(visual) = self.target.as_ref().unwrap().Root() {
-            let visuals = visual.cast::<ContainerVisual>()?.Children()?;
-            let window_size = self.window.as_ref().unwrap().inner_size();
+        let root = self.target.as_ref().unwrap().Root()?;
+        let visuals = root.cast::<ContainerVisual>()?.Children()?;
+        let window_size = self.window.as_ref().unwrap().inner_size();
 
-            // Create randomized squares.
-            let element = self.compositor.CreateSpriteVisual()?;
-            let mut rng = rand::rng();
-            let size = rng.random_range(50..150);
-            let x = rng.random_range(0..window_size.width - size) as f32;
-            let y = rng.random_range(0..(window_size.height / 2) - size) as f32;
+        // Create randomized squares.
+        let element = self.compositor.CreateSpriteVisual()?;
+        let mut rng = rand::rng();
+        let size = rng.random_range(50..150);
+        let x = rng.random_range(0..window_size.width - size) as f32;
+        let y = rng.random_range(0..(window_size.height / 2) - size) as f32;
 
-            element.SetBrush(
-                &self
-                    .compositor
-                    .CreateColorBrushWithColor(get_random_color())?,
-            )?;
-            element.SetSize(Vector2 {
-                X: size as f32,
-                Y: size as f32,
-            })?;
-            element.SetOffset(Vector3 { X: x, Y: y, Z: 0.0 })?;
+        element.SetBrush(
+            &self
+                .compositor
+                .CreateColorBrushWithColor(get_random_color())?,
+        )?;
+        element.SetSize(Vector2 {
+            X: size as f32,
+            Y: size as f32,
+        })?;
+        element.SetOffset(Vector3 { X: x, Y: y, Z: 0.0 })?;
 
-            // Set square falling animations.
-            let animation = self.compositor.CreateVector3KeyFrameAnimation()?;
-            let bottom = window_size.height - size;
+        // Set square falling animations.
+        let animation = self.compositor.CreateVector3KeyFrameAnimation()?;
+        let bottom = window_size.height - size;
 
-            animation.InsertKeyFrame(
-                1.0,
-                Vector3 {
-                    X: x,
-                    Y: bottom as f32,
-                    Z: 0.0,
-                },
-            )?;
-            animation.SetDuration(Duration::from_secs(2).into())?;
-            animation.SetDelayTime(Duration::from_secs(3).into())?;
-            element.StartAnimation(h!("Offset"), &animation)?;
+        animation.InsertKeyFrame(
+            1.0,
+            Vector3 {
+                X: x,
+                Y: bottom as f32,
+                Z: 0.0,
+            },
+        )?;
+        animation.SetDuration(Duration::from_secs(2).into())?;
+        animation.SetDelayTime(Duration::from_secs(3).into())?;
+        element.StartAnimation(h!("Offset"), &animation)?;
 
-            visuals.InsertAtTop(&element)?;
-        }
+        visuals.InsertAtTop(&element)?;
 
         Ok(())
     }
