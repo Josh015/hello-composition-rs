@@ -8,7 +8,6 @@ use windows::{
         Color,
         Composition::{
             Compositor, ContainerVisual, Desktop::DesktopWindowTarget,
-            SpriteVisual,
         },
     },
     Win32::{
@@ -121,7 +120,8 @@ impl ApplicationHandler for Application {
 }
 
 impl Application {
-    pub fn add_element(&self) -> Result<()> {
+    fn add_element(&self) -> Result<()> {
+        // Create randomized squares.
         let window_size = self.window.as_ref().unwrap().inner_size();
         let mut rng = rand::rng();
         let size = rng.random_range(50..150);
@@ -144,21 +144,15 @@ impl Application {
             Z: 0.0,
         })?;
         self.container_visual.Children()?.InsertAtTop(&visual)?;
-        self.animate_square(&visual)?;
 
-        Ok(())
-    }
-
-    fn animate_square(&self, visual: &SpriteVisual) -> Result<()> {
-        let window_size = self.window.as_ref().unwrap().inner_size();
-        let offset_x = visual.Offset()?.X;
+        // Set square falling animations.
         let animation = self.compositor.CreateVector3KeyFrameAnimation()?;
         let bottom = window_size.height as f32 - visual.Size()?.Y;
 
         animation.InsertKeyFrame(
             1.0,
             Vector3 {
-                X: offset_x,
+                X: offset_x as f32,
                 Y: bottom,
                 Z: 0.0,
             },
