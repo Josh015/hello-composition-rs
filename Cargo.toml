@@ -10,13 +10,12 @@ anyhow = "1.0.96"
 rand = "0.9.0"
 raw-window-handle = "0.6.2"
 winit = "0.30.9"
+windows-numerics = "0.1"
 
 [dependencies.windows]
 # git = "https://github.com/microsoft/windows-rs"
-version = "0.59.0"
+version = "0.60.0"
 features = [
-  "Foundation_Collections",
-  "Foundation_Numerics",
   "System",
   "UI_Composition_Desktop",
   "Win32_Foundation",

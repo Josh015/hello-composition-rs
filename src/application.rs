@@ -2,7 +2,6 @@ use rand::{distr::Uniform, prelude::*};
 use raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use std::{ffi::c_void, time::Duration};
 use windows::{
-    Foundation::Numerics::{Vector2, Vector3},
     System::DispatcherQueueController,
     UI::{
         Color,
@@ -23,6 +22,7 @@ use windows::{
     },
     core::*,
 };
+use windows_numerics::{Vector2, Vector3};
 use winit::{
     application::ApplicationHandler,
     event::{ElementState, MouseButton, WindowEvent},
