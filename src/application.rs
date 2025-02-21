@@ -1,6 +1,6 @@
 use rand::{distr::Uniform, prelude::*};
 use raw_window_handle::{HasWindowHandle, RawWindowHandle};
-use std::time::Duration;
+use std::{ffi::c_void, time::Duration};
 use windows::{
     Foundation::Numerics::{Vector2, Vector3},
     System::DispatcherQueueController,
@@ -27,16 +27,15 @@ use windows::{
 use winit::{
     application::ApplicationHandler,
     event::{ElementState, MouseButton, WindowEvent},
-    window::{Window, WindowAttributes},
+    event_loop::ActiveEventLoop,
+    window::{Window, WindowAttributes, WindowId},
 };
 
 pub struct Application {
-    #[allow(dead_code)]
-    controller: DispatcherQueueController,
+    _controller: DispatcherQueueController,
     container_visual: ContainerVisual,
     compositor: Compositor,
     window: Option<Window>,
-    #[allow(dead_code)]
     target: Option<DesktopWindowTarget>,
 }
 
@@ -53,12 +52,16 @@ impl Default for Application {
         let controller =
             unsafe { CreateDispatcherQueueController(options).unwrap() };
 
-        // Create compositor.
+        // Create compositor and container.
         let compositor = Compositor::new().unwrap();
         let container_visual = compositor.CreateContainerVisual().unwrap();
 
+        container_visual
+            .SetRelativeSizeAdjustment(Vector2 { X: 1.0, Y: 1.0 })
+            .unwrap();
+
         Self {
-            controller,
+            _controller: controller,
             container_visual,
             compositor,
             window: None,
@@ -68,7 +71,8 @@ impl Default for Application {
 }
 
 impl ApplicationHandler for Application {
-    fn resumed(&mut self, event_loop: &winit::event_loop::ActiveEventLoop) {
+    fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+        // Create window.
         let window_attributes = WindowAttributes::default()
             .with_title("Left click to add composition elements...")
             .with_resizable(false);
@@ -77,12 +81,12 @@ impl ApplicationHandler for Application {
         let raw_window_handle = window.window_handle().unwrap().into();
         let hwnd = match raw_window_handle {
             RawWindowHandle::Win32(window_handle) => {
-                HWND(window_handle.hwnd.into())
+                HWND(window_handle.hwnd.get() as *mut c_void)
             },
             _ => panic!("Unsupported platform!"),
         };
 
-        // Create compositor.
+        // Attach compositor to window.
         let compositor_desktop: ICompositorDesktopInterop =
             self.compositor.cast().unwrap();
         let target = unsafe {
@@ -90,20 +94,17 @@ impl ApplicationHandler for Application {
                 .CreateDesktopWindowTarget(hwnd, false)
                 .unwrap()
         };
-        self.container_visual
-            .SetRelativeSizeAdjustment(Vector2 { X: 1.0, Y: 1.0 })
-            .unwrap();
-        target.SetRoot(&self.container_visual).unwrap();
 
+        target.SetRoot(&self.container_visual).unwrap();
         self.window = Some(window);
         self.target = Some(target);
     }
 
     fn window_event(
         &mut self,
-        event_loop: &winit::event_loop::ActiveEventLoop,
-        _window_id: winit::window::WindowId,
-        event: winit::event::WindowEvent,
+        event_loop: &ActiveEventLoop,
+        _window_id: WindowId,
+        event: WindowEvent,
     ) {
         match event {
             WindowEvent::CloseRequested => event_loop.exit(),

@@ -13,12 +13,13 @@ winit = "0.30.9"
 
 [dependencies.windows]
 # git = "https://github.com/microsoft/windows-rs"
-version = "0.54.0"
+version = "0.59.0"
 features = [
-    "Foundation_Numerics",
-    "System",
-    "UI_Composition_Desktop",
-    "Win32_Foundation",
-    "Win32_System_Com",
-    "Win32_System_WinRT_Composition",
+  "Foundation_Collections",
+  "Foundation_Numerics",
+  "System",
+  "UI_Composition_Desktop",
+  "Win32_Foundation",
+  "Win32_System_Com",
+  "Win32_System_WinRT_Composition",
 ]
