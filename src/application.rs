@@ -40,7 +40,7 @@ pub struct Application {
 impl Default for Application {
     fn default() -> Self {
         // Initialize.
-        unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED).ok().unwrap() };
+        unsafe { CoInitializeEx(None, COINIT_APARTMENTTHREADED).unwrap() };
 
         let options = DispatcherQueueOptions {
             dwSize: std::mem::size_of::<DispatcherQueueOptions>() as u32,
